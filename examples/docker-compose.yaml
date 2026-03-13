@@ -1,0 +1,22 @@
+services:
+  kea-sync:
+    image: ghcr.io/openchami/kea-sync:latest
+    container_name: kea-sync
+    ports:
+      - "8080:8080"
+    environment:
+      KEA_SYNC_LISTEN_ADDR: ":8080"
+      KEA_SYNC_LOG_LEVEL: "info"
+      KEA_SYNC_SYNC_INTERVAL: "30s"
+      KEA_SYNC_PAGE_LIMIT: "100"
+      KEA_SYNC_SMD_URL: "http://smd:27779"
+      KEA_SYNC_SMD_TARGET_SERVICE: "smd"
+      KEA_SYNC_KEA_URL: "http://kea-control-agent:8000"
+      KEA_SYNC_KEA_TARGET_SERVICE: "kea"
+      KEA_SYNC_KEA_SERVICES: "dhcp4"
+      KEA_SYNC_TOKENSMITH_URL: "http://tokensmith:8080"
+      KEA_SYNC_TOKENSMITH_SERVICE_API_KEY: "replace-me"
+      KEA_SYNC_AUTH_JWKS_URL: "http://tokensmith:8080/jwks.json"
+      KEA_SYNC_AUTH_READ_SCOPES: "kea-sync.read"
+      KEA_SYNC_AUTH_WRITE_SCOPES: "kea-sync.write"
+    restart: unless-stopped
