@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/url"
 
 	"github.com/OpenCHAMI/kea-sync/internal/httpjson"
 )
@@ -66,16 +65,8 @@ func (c *Client) Components(ctx context.Context) ([]Component, error) {
 }
 
 func (c *Client) Probe(ctx context.Context) error {
-	if _, err := c.http.Do(ctx, "GET", "/hsm/v2/Inventory/EthernetInterfaces", httpjson.RequestOptions{
-		Query: url.Values{"ComponentID": []string{"__kea_sync_probe__"}},
-	}); err != nil {
-		return fmt.Errorf("probe EthernetInterfaces: %w", err)
-	}
-
-	if _, err := c.http.Do(ctx, "GET", "/hsm/v2/State/Components", httpjson.RequestOptions{
-		Query: url.Values{"id": []string{"__kea_sync_probe__"}},
-	}); err != nil {
-		return fmt.Errorf("probe Components: %w", err)
+	if _, err := c.http.Do(ctx, "GET", "/hsm/v2/service/ready", httpjson.RequestOptions{}); err != nil {
+		return fmt.Errorf("probe readiness: %w", err)
 	}
 
 	return nil
